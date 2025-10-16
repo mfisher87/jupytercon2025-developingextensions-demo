@@ -35,7 +35,9 @@ jobs:
           uv run --extra dev jlpm build
 
       - name: "Build JupyterLite"
-        run: "uv run --extra dev --with jupyterlite --with jupyterlite-xeus jupyter lite build"
+        run: |
+          uv run --extra dev --with jupyterlite --with jupyterlite-xeus \
+          jupyter lite build --XeusAddon.environment_file=jupyterlite-environment.yml
 
       - name: "Upload site artifact"
         uses: "actions/upload-pages-artifact@v3"
