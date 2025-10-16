@@ -58,7 +58,7 @@ The `jlpm` command is JupyterLab's pinned version of
 # Clone the repo to your local environment
 # Change directory to the myextension directory
 # Install package in development mode
-pip install -e ".[test]"
+pip install -e ".[dev,test]"
 # Link your development version of the extension with JupyterLab
 jupyter labextension develop . --overwrite
 # Server extension must be manually installed in develop mode
