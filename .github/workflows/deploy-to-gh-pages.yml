@@ -42,7 +42,6 @@ jobs:
       - name: "Build our extensions"
         run: |
           pip install ".[dev]"
-          jupyter labextension develop . --overwrite
           jupyter server extension enable myextension
           jlpm build
 
