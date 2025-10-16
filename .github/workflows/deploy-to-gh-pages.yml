@@ -34,6 +34,11 @@ jobs:
           uv run --extra dev jupyter server extension enable myextension
           uv run --extra dev jlpm build
 
+      - name: "Install mamba for JupyterLite build"
+        uses: "mamba-org/setup-micromamba@v1"
+        with:
+          micromamba-version: "2.3.2-0"
+
       - name: "Build JupyterLite"
         run: |
           uv run --extra dev --with jupyterlite --with jupyterlite-xeus \
