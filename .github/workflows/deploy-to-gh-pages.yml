@@ -39,12 +39,6 @@ jobs:
             jupyterlite
             jupyterlite-xeus
 
-      - name: "Build our extensions"
-        run: |
-          pip install ".[dev]"
-          jupyter server extension enable myextension
-          jlpm build
-
       - name: "Build JupyterLite"
         run: |
           jupyter lite build --XeusAddon.environment_file=jupyterlite-environment.yml
