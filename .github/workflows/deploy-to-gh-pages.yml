@@ -1,0 +1,65 @@
+name: "Deploy to GH Pages with JupyterLite"
+
+on:
+  # TODO: Remove pull_request trigger
+  pull_request:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+
+# Allow one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+
+env:
+  UV_SYSTEM_PYTHON: 1
+
+jobs:
+  build:
+    name: "python"
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - uses: "actions/checkout@v5"
+      - uses: "actions/setup-python@v6"
+
+      - name: "Install uv"
+        uses: "astral-sh/setup-uv@v6"
+
+      - name: "Install our extension dependencies"
+        run: "uv pip install .[dev]"
+
+      - name: "Build our extensions"
+        run: |
+          jupyter labextension develop . --overwrite
+          jupyter server extension enable myextension
+          jlpm build
+
+      - name: "Install JupyterLite and Python kernel"
+        run: "uv pip install jupyterlite jupyterlite-xeus"
+
+      - name: "Build JupyterLite"
+        run: "jupyter lite build"
+
+      - name: "Upload site artifact"
+        uses: "actions/upload-pages-artifact@v3"
+        with:
+          path: "./_site"
+
+
+  deploy:
+    runs-on: "ubuntu-latest"
+    needs: "build"
+    environment:
+      name: "github-pages"
+      url: "${{ steps.deployment.outputs.page_url }}"
+    permissions:
+      pages: "write"
+      id-token: "write"
+    steps:
+      - name: "Deploy to GitHub Pages"
+        id: "deployment"
+        uses: "actions/deploy-pages@v4"
