@@ -2,12 +2,12 @@ import {
   JupyterFrontEnd,
   JupyterFrontEndPlugin
 } from '@jupyterlab/application';
-import { MainAreaWidget, ICommandPalette } from '@jupyterlab/apputils';
+import { ICommandPalette } from '@jupyterlab/apputils';
 import { ILauncher } from '@jupyterlab/launcher';
 import { imageIcon } from '@jupyterlab/ui-components';
 
 import { requestAPI } from './handler';
-import { ImageCaptionWidget } from './widget';
+import { ImageCaptionMainAreaWidget } from './widget';
 
 /**
  * Initialization data for the myextension extension.
@@ -39,15 +39,9 @@ const plugin: JupyterFrontEndPlugin<void> = {
     const command = 'image-caption:open';
     app.commands.addCommand(command, {
       execute: () => {
-        const widget = new ImageCaptionWidget();
-        const main = new MainAreaWidget({ content: widget });
+        const widget = new ImageCaptionMainAreaWidget();
 
-        // Set some metadata
-        main.title.label = 'Random image with caption';
-        main.title.caption = widget.title.label;
-        main.title.icon = imageIcon;
-
-        app.shell.add(main, 'main');
+        app.shell.add(widget, 'main');
       },
       icon: imageIcon,
       label: 'View a random image & caption'
