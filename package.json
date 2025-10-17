@@ -7,9 +7,9 @@
         "jupyterlab",
         "jupyterlab-extension"
     ],
-    "homepage": "https://github.com/jupytercon/jupyterlab-test-extension",
+    "homepage": "https://github.com/jupytercon/jupytercon2025-developingextensions-demo",
     "bugs": {
-        "url": "https://github.com/jupytercon/jupyterlab-test-extension/issues"
+        "url": "https://github.com/jupytercon/jupytercon2025-developingextensions-demo/issues"
     },
     "license": "BSD-3-Clause",
     "author": {
@@ -26,7 +26,7 @@
     "style": "style/index.css",
     "repository": {
         "type": "git",
-        "url": "https://github.com/jupytercon/jupyterlab-test-extension.git"
+        "url": "https://github.com/jupytercon/jupytercon2025-developingextensions-demo.git"
     },
     "scripts": {
         "build": "jlpm build:lib && jlpm build:labextension:dev",
