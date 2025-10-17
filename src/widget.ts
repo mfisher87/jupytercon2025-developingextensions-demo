@@ -1,7 +1,10 @@
 import { Widget } from '@lumino/widgets';
+import { MainAreaWidget, ToolbarButton } from '@jupyterlab/apputils';
+import { refreshIcon, imageIcon } from '@jupyterlab/ui-components';
+
 import { requestAPI } from './handler';
 
-export class ImageCaptionWidget extends Widget {
+class ImageCaptionWidget extends Widget {
   // Initialization
   constructor() {
     super();
@@ -40,4 +43,25 @@ export class ImageCaptionWidget extends Widget {
   // Information for the type checker
   img: HTMLImageElement;
   caption: HTMLParagraphElement;
+}
+
+export class ImageCaptionMainAreaWidget extends MainAreaWidget<ImageCaptionWidget> {
+  constructor() {
+    const content = new ImageCaptionWidget();
+    super({ content });
+
+    this.title.label = 'Random image with caption';
+    this.title.caption = this.title.label;
+    this.title.icon = imageIcon;
+
+    // Add a refresh button to the toolbar
+    const refreshButton = new ToolbarButton({
+      icon: refreshIcon,
+      tooltip: 'Refresh image',
+      onClick: () => {
+        content.load_image();
+      }
+    });
+    this.toolbar.addItem('refresh', refreshButton);
+  }
 }
