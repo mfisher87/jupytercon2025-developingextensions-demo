@@ -1,0 +1,64 @@
+name: "Deploy to GH Pages with JupyterLite"
+
+on:
+  # TODO: Remove pull_request trigger
+  pull_request:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+
+# Allow one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+
+defaults:
+  run:
+    # Automatic activation of micromamba env
+    shell: "bash -leo pipefail {0}"
+
+
+jobs:
+  build:
+    name: "python"
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - uses: "actions/checkout@v5"
+
+      - name: "Install mamba for JupyterLite build"
+        uses: "mamba-org/setup-micromamba@v1"
+        with:
+          micromamba-version: "2.3.2-0"
+          environment-name: "build"
+          create-args: >-
+            python
+            pip
+            jupyterlite
+            jupyterlite-xeus
+
+      - name: "Build JupyterLite"
+        run: |
+          jupyter lite build --XeusAddon.environment_file=jupyterlite-environment.yml
+
+      - name: "Upload site artifact"
+        uses: "actions/upload-pages-artifact@v3"
+        with:
+          path: "./_output"
+
+
+  deploy:
+    runs-on: "ubuntu-latest"
+    needs: "build"
+    environment:
+      name: "github-pages"
+      url: "${{ steps.deployment.outputs.page_url }}"
+    permissions:
+      pages: "write"
+      id-token: "write"
+    steps:
+      - name: "Deploy to GitHub Pages"
+        id: "deployment"
+        uses: "actions/deploy-pages@v4"
