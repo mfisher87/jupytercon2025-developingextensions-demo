@@ -15,7 +15,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
   activate: (app: JupyterFrontEnd) => {
     console.log('JupyterLab extension myextension is activated!');
 
-    requestAPI<any>('get-example')
+    requestAPI<any>('hello')
       .then(data => {
         console.log(data);
       })
